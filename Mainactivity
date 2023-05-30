@@ -1,0 +1,85 @@
+package com.example.individual5;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    //declaramos la variables y los metodos
+    private EditText nombreEditText;
+    private EditText apellidoEditText;
+    private EditText correoEditText;
+    private EditText claveEditText;
+
+    private boolean validarNombre(String nombre) {
+        return !nombre.isEmpty() && nombre.matches("[a-zA-Z]+");
+    }
+
+    private boolean validarApellido(String apellido) {
+        return !apellido.isEmpty() && apellido.matches("[a-zA-Z]+");
+    }
+
+    private boolean validarCorreo(String correo) {
+        return correo.contains("@");
+    }
+
+    private boolean validarClave(String clave) {
+        // Implementa tu lógica de validación para la clave aquí
+        return clave.length() == 8;
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        nombreEditText = findViewById(R.id.nombre_);
+        apellidoEditText = findViewById(R.id.apellido_);
+        correoEditText = findViewById(R.id.correo_);
+        claveEditText = findViewById(R.id.clave_);
+
+        Button suscribirseButton = findViewById(R.id.suscribete_);
+        suscribirseButton.setOnClickListener(v -> {
+            // obtenemos los datos del usuario.
+            String nombre = nombreEditText.getText().toString();
+            String apellido = apellidoEditText.getText().toString();
+            String correo = correoEditText.getText().toString();
+            String clave = claveEditText.getText().toString();
+//validamos los campos
+
+            //revisar la validadcion de campos
+            if (!validarNombre(nombre)) {
+                nombreEditText.setError("Ingrese un nombre válido");
+                return;
+            }
+
+            if (!validarApellido(apellido)) {
+                apellidoEditText.setError("Ingrese un apellido válido");
+                return;
+            }
+
+            if (!validarCorreo(correo)) {
+                correoEditText.setError("Ingrese un correo válido");
+                return;
+            }
+
+            if (!validarClave(clave)) {
+                claveEditText.setError("Ingrese una clave válida (8 caracteres)");
+                return;
+            }
+
+
+            //creamos intent para iniciar la segunda actividad.
+            Intent intent = new Intent(MainActivity.this, MostrarResultadosActivity.class);
+            intent.putExtra("nombre", nombre);
+            intent.putExtra("apellido", apellido);
+            intent.putExtra("correo", correo);
+            intent.putExtra("clave", clave);
+            startActivity(intent);
+        });
+    }
+}
